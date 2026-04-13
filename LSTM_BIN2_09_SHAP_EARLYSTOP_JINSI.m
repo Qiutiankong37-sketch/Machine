@@ -6,8 +6,6 @@
 % 4. LSTM深度学习模型
 % 5. 模型集成（LightGBM + LSTM）
 % 6. 模型训练 + 交叉验证
-% 7. 预测 T3 + 评估（AUC, F1等二分类指标）
-% 8. SHAP值分析和可视化
 
 warning off; close all; clear; clc;
 % 设置随机种子以确保结果可重现
@@ -342,11 +340,7 @@ default_params.lambda_l2 = 0.1;
 default_params.scale_pos_weight = max(1.0, (1-pos_ratio)/pos_ratio);
 
 % ISSA优化设置
-n_pop = 50;            % 麻雀种群数量 (根据论文设置)
-n_iterations = 50;     % 迭代次数 (根据论文设置)
-n_pd = 0.2;            % 发现者比例
-n_sd = 0.1;            % 警戒者比例
-R2 = 0.8;              % 安全阈值
+
 
 fprintf('开始改进麻雀搜索算法（ISSA）参数搜索（仅保留训练集AUC≤0.95的模型）...\n');
 
