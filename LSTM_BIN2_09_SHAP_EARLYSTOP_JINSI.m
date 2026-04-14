@@ -6,6 +6,8 @@
 % 4. LSTM深度学习模型
 % 5. 模型集成（LightGBM + LSTM）
 % 6. 模型训练 + 交叉验证
+% 7. 预测 T3 + 评估（AUC, F1等二分类指标）
+% 8. SHAP值分析和可视化
 
 warning off; close all; clear; clc;
 % 设置随机种子以确保结果可重现
@@ -25,16 +27,16 @@ loadlibrary('lib_lightgbm.dll', 'c_api.h');
 % 每个文件包含相同的19个特征列和1个目标列
 
 fprintf('正在加载T1数据...\n');
-data_T1 = readtable('transT1.xlsx');
+data_T1 = readtable('transT11.xlsx');
 feature_names = data_T1.Properties.VariableNames(1:end-1);  % 假设最后一列是目标变量
 res_T1 = table2array(data_T1);
 
 fprintf('正在加载T2数据...\n');
-data_T2 = readtable('transT2.xlsx');
+data_T2 = readtable('transT22.xlsx');
 res_T2 = table2array(data_T2);
 
 fprintf('正在加载T3数据...\n');
-data_T3 = readtable('transT3.xlsx');
+data_T3 = readtable('transT33.xlsx');
 res_T3 = table2array(data_T3);
 
 % 验证数据一致性
@@ -340,7 +342,11 @@ default_params.lambda_l2 = 0.1;
 default_params.scale_pos_weight = max(1.0, (1-pos_ratio)/pos_ratio);
 
 % ISSA优化设置
-
+n_pop = 50;            % 麻雀种群数量 (根据论文设置)
+n_iterations = 50;     % 迭代次数 (根据论文设置)
+n_pd = 0.2;            % 发现者比例
+n_sd = 0.1;            % 警戒者比例
+R2 = 0.8;              % 安全阈值
 
 fprintf('开始改进麻雀搜索算法（ISSA）参数搜索（仅保留训练集AUC≤0.95的模型）...\n');
 
@@ -881,7 +887,18 @@ T_test_aligned = logical(T_test_aligned(:));
 
 % 计算对数损失
 train_logloss = log_loss(T_train_aligned, ensemble_train_prob);
-test_logloss = log_loss(T_test_aligned, ensemble_test_prob);
+
+     
+% 检查可选变量
+if exist('T_train_aligned', 'var')
+    save_variables{end+1} = 'T_train_aligned';
+end
+if exist('T_test_aligned', 'var')
+    save_variables{end+1} = 'T_test_aligned';
+end
+
+save('T3_binary_classification_results.mat', save_variables{:});
+fprintf('结果已保存到 T3_binary_classification_results.mat\n');
 
 toc
 
