@@ -1,6 +1,6 @@
-u2_eng_better_earlystop用于分析横断数据进行分析得出最佳参数用于后面代码分析并使用SHAP进行分析
-lunwenT1使用T1_0113数据进行分析
-lunwenT2使用T2_0113数据进行分析
-LSTM_BIN2_09_SHAP_EARLYSTOP_JINSI用于分析T3时段的时序研究
+u2_eng_better_earlystop用于分析横断数据进行分析得出最佳参数用于后面代码分析并使用SHAP进行分析；
+lunwenT1使用T1_0113数据进行分析；
+lunwenT2使用T2_0113数据进行分析；
+LSTM_BIN2_09_SHAP_EARLYSTOP_JINSI用于分析T3时段的时序研究；
 
 使用工具为matlab
